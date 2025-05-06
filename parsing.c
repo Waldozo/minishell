@@ -6,7 +6,7 @@
 /*   By: wlarbi-a <wlarbi-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 17:13:50 by wlarbi-a          #+#    #+#             */
-/*   Updated: 2025/05/06 00:22:14 by wlarbi-a         ###   ########.fr       */
+/*   Updated: 2025/05/06 19:31:16 by wlarbi-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,13 +42,20 @@ void	is_token(t_struct *data)
 			data->type = PIPE;
 		else if (data->str[i] == ' ')
 			data->type = SPACES;
+		else if (data->str[i] == '>')
+		{
+			if (ft_strlen(&data->str[0]) > 1 && data->str[1] == '>')
+				data->type = APPEND;
+		}
 		else if (data->str[i] == '<')
 		{
 			if (ft_strlen(&data->str[0]) > 1 && data->str[1] == '<')
 				data->type = HEREDOC;
 			else
-				data->type = REDIR;
+				data->type = REDIR_IN;
 		}
+		else if(data->str[i] == '>')
+			data->type = REDIR_OUT;
 		else
 			i = utils_token(data, i);
 	}
@@ -62,5 +69,6 @@ void	parsing(t_struct *data)
 	is_token(data);
 	parse_error_pipe(data);
 	parse_redir(data);
+	token_append(data);
 	parsing_quote(data);
 }
