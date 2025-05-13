@@ -6,7 +6,7 @@
 /*   By: wlarbi-a <wlarbi-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 17:13:50 by wlarbi-a          #+#    #+#             */
-/*   Updated: 2025/05/06 19:31:16 by wlarbi-a         ###   ########.fr       */
+/*   Updated: 2025/05/13 17:05:04 by wlarbi-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,44 @@ int	utils_token(t_struct *data, int i)
 	return (i);
 }
 
+int	identify_redirection(t_struct *data, int i)
+{
+	if (data->str[i] == '>')
+	{
+		if (data->str[i + 1] == '>')
+			data->type = APPEND;
+		else
+			data->type = REDIR_OUT;
+	}
+	else if (data->str[i] == '<')
+	{
+		if (data->str[i + 1] == '<')
+			data->type = HEREDOC;
+		else
+			data->type = REDIR_IN;
+	}
+	return (i);
+}
+
+int	identify_special_token(t_struct *data, int i)
+{
+	if (data->str[i] == '\'')
+		data->type = S_QUOTE;
+	else if (data->str[i] == '\"')
+		data->type = D_QUOTE;
+	else if (data->str[i] == '(' || data->str[i] == ')')
+		data->type = PARENTHESIS;
+	else if (data->str[i] == '|')
+		data->type = PIPE;
+	else if (data->str[i] == ' ')
+		data->type = SPACES;
+	else if (data->str[i] == '>' || data->str[i] == '<')
+		i = identify_redirection(data, i);
+	else
+		return (utils_token(data, i));
+	return (i);
+}
+
 void	is_token(t_struct *data)
 {
 	int	i;
@@ -32,32 +70,7 @@ void	is_token(t_struct *data)
 	i = -1;
 	while (++i, data->str[i])
 	{
-		if (data->str[i] == '\'')
-			data->type = S_QUOTE;
-		else if (data->str[i] == '\"')
-			data->type = D_QUOTE;
-		else if (data->str[i] == '(' || data->str[i] == ')')
-			data->type = PARENTHESIS;
-		else if (data->str[i] == '|')
-			data->type = PIPE;
-		else if (data->str[i] == ' ')
-			data->type = SPACES;
-		else if (data->str[i] == '>')
-		{
-			if (ft_strlen(&data->str[0]) > 1 && data->str[1] == '>')
-				data->type = APPEND;
-		}
-		else if (data->str[i] == '<')
-		{
-			if (ft_strlen(&data->str[0]) > 1 && data->str[1] == '<')
-				data->type = HEREDOC;
-			else
-				data->type = REDIR_IN;
-		}
-		else if(data->str[i] == '>')
-			data->type = REDIR_OUT;
-		else
-			i = utils_token(data, i);
+		identify_special_token(data, i);
 	}
 }
 
@@ -67,8 +80,8 @@ void	parsing(t_struct *data)
 		return ;
 	data->type = NONE;
 	is_token(data);
+	parsing_quote(data);
 	parse_error_pipe(data);
 	parse_redir(data);
 	token_append(data);
-	parsing_quote(data);
 }
