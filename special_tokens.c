@@ -6,7 +6,7 @@
 /*   By: wlarbi-a <wlarbi-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 17:43:07 by wlarbi-a          #+#    #+#             */
-/*   Updated: 2025/05/13 17:04:30 by wlarbi-a         ###   ########.fr       */
+/*   Updated: 2025/05/18 18:58:32 by wlarbi-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,12 +68,10 @@ int	token_init(t_struct *data)
 	data->str = copy;
 	data->next = NULL;
 	while (data->str[i] && data->str[i] != ' ' && data->str[i] != '<'
-		&& data->str[i] != '>' && data->str[i] != '|')
+		&& data->str[i] != '>' && data->str[i] != '|' && data->str[i] != '('
+		&& data->str[i] != ')' && data->str[i] != '\'' && data->str[i] != '\"')
 		i++;
-	if (i > 0)
-		data->type = WORD;
-	else
-		i = 0;
+	i = 0;
 	return (i);
 }
 
@@ -88,9 +86,14 @@ void	tokenize_string(t_struct *data, int i)
 	{
 		if (data->str[i] == ' ')
 			handle_space_token(data->str, &i, &cur);
-		handle_special_tokens(data->str, &i, &cur);
-		if (data->str[i] && data->str[i] != ' ' && data->str[i] != '<'
-			&& data->str[i] != '>' && data->str[i] != '|')
+		else if (data->str[i] == '\"' || data->str[i] == '\'')
+			handle_quotes(data->str, &i, &cur);
+		else if (data->str[i] == '<' || data->str[i] == '>')
+			handle_redir_token(data->str, &i, &cur);
+		else if (data->str[i] == '|' || data->str[i] == '('
+			|| data->str[i] == ')')
+			handle_special_tokens(data->str, &i, &cur);
+		else if (data->str[i])
 			handle_word_token(data->str, &i, &cur);
 	}
 }

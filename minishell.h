@@ -6,7 +6,7 @@
 /*   By: wlarbi-a <wlarbi-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 16:54:23 by wlarbi-a          #+#    #+#             */
-/*   Updated: 2025/05/13 17:03:28 by wlarbi-a         ###   ########.fr       */
+/*   Updated: 2025/05/18 19:14:28 by wlarbi-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,10 @@ typedef enum e_token
 	HEREDOC,
 	PARENTHESIS,
 	SPACES,
+	WORD_D_QUOTES,
+	WORD_S_QUOTES,
+	INFILE,
+	OUTFILE,
 }					t_token;
 
 typedef struct s_struct
@@ -49,33 +53,36 @@ char				*ft_strchr(char *str, int n);
 char				*ft_strdup(char *src);
 size_t				ft_strcpy(char *dst, char *src);
 size_t				ft_strcat(char *dst, char *src);
-
+size_t				ft_strlcpy(char *dst, char *src, size_t size);
 /*------------------parsing-----------------*/
 
-void				parsing(t_struct *data);
+int					parsing(t_struct *data);
 void				is_token(t_struct *data);
 int					identify_special_token(t_struct *data, int i);
 int					identify_redirection(t_struct *data, int i);
+
 /*--------------parsing pipe----------------*/
 
 int					utils_parse_pipe(t_struct *data, int i, int *found_pipe);
-void				parse_error_pipe(t_struct *data);
+int					parse_error_pipe(t_struct *data);
 
 /*--------------parsing redir----------------*/
 
-void				parse_redir(t_struct *data);
+int					parse_redir(t_struct *data);
 int					utils_parse_redir(t_struct *data, int i, int *found_redir);
 int					handle_redir(t_struct *data, int i, int *found_redir);
 
 /*---------------parsing quote---------------*/
 
-void				parsing_quote(t_struct *data);
+int					parsing_quote(t_struct *data);
 
 /*--------------------path------------------*/
+
 char				*find_path(char *cmd, char **paths);
 void				free_paths(char **paths);
 
 /*---------------special tokens-------------*/
+
 void				free_token_list(t_struct *start);
 t_struct			*create_token(const char *str, int len, t_token type);
 int					token_init(t_struct *data);
@@ -83,8 +90,19 @@ void				tokenize_string(t_struct *data, int i);
 void				token_append(t_struct *data);
 
 /*-----------------handle------------------*/
+
 void				handle_space_token(char *s, int *i, t_struct **cur);
 void				handle_word_token(char *s, int *i, t_struct **cur);
 void				handle_special_tokens(char *s, int *i, t_struct **cur);
 void				append_and_advance(t_struct **cur, t_struct *new);
+void				handle_redir_token(char *s, int *i, t_struct **cur);
+void				handle_quotes(char *s, int *i, t_struct **cur);
+/*-----------------word quote------------------*/
+
+void				word_quote(t_struct *data, int *i, t_struct **cur);
+void				handle_word_d_quotes(t_struct *data, int *i,
+						t_struct **cur);
+void				handle_word_s_quotes(t_struct *data, int *i,
+						t_struct **cur);
+
 #endif

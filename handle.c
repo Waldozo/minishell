@@ -6,7 +6,7 @@
 /*   By: wlarbi-a <wlarbi-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 14:57:06 by wlarbi-a          #+#    #+#             */
-/*   Updated: 2025/05/13 16:46:56 by wlarbi-a         ###   ########.fr       */
+/*   Updated: 2025/05/18 18:58:09 by wlarbi-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 void	handle_space_token(char *s, int *i, t_struct **cur)
 {
 	append_and_advance(cur, create_token(" ", 1, SPACES));
-	while (s[*i] == ' ')
+	if (s[*i])
 		(*i)++;
 }
 
@@ -25,14 +25,43 @@ void	handle_word_token(char *s, int *i, t_struct **cur)
 	int	len;
 
 	start = *i;
-	while (s[*i] && s[*i] != ' ' && s[*i] != '<' && s[*i] != '>'
-		&& s[*i] != '|')
+	while (s[*i] && s[*i] != ' ' && s[*i] != '<' && s[*i] != '>' && s[*i] != '|'
+		&& s[*i] != '(' && s[*i] != ')')
 		(*i)++;
 	len = *i - start;
 	append_and_advance(cur, create_token(s + start, len, WORD));
 }
 
 void	handle_special_tokens(char *s, int *i, t_struct **cur)
+{
+	if (s[*i] == '|')
+	{
+		append_and_advance(cur, create_token("|", 1, PIPE));
+		(*i)++;
+	}
+	else if (s[*i] == '(')
+	{
+		append_and_advance(cur, create_token("(", 1, PARENTHESIS));
+		(*i)++;
+	}
+	else if (s[*i] == ')')
+	{
+		append_and_advance(cur, create_token(")", 1, PARENTHESIS));
+		(*i)++;
+	}
+	else if (s[*i] == '\'')
+	{
+		append_and_advance(cur, create_token("'", 1, S_QUOTE));
+		(*i)++;
+	}
+	else if (s[*i] == '\"')
+	{
+		append_and_advance(cur, create_token("\"", 1, D_QUOTE));
+		(*i)++;
+	}
+}
+
+void	handle_redir_token(char *s, int *i, t_struct **cur)
 {
 	if (s[*i] == '>' && s[*i + 1] == '>')
 	{
@@ -52,11 +81,6 @@ void	handle_special_tokens(char *s, int *i, t_struct **cur)
 	else if (s[*i] == '<')
 	{
 		append_and_advance(cur, create_token("<", 1, REDIR_IN));
-		(*i)++;
-	}
-	else if (s[*i] == '|')
-	{
-		append_and_advance(cur, create_token("|", 1, PIPE));
 		(*i)++;
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: wlarbi-a <wlarbi-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 17:13:50 by wlarbi-a          #+#    #+#             */
-/*   Updated: 2025/05/13 17:05:04 by wlarbi-a         ###   ########.fr       */
+/*   Updated: 2025/05/18 18:59:12 by wlarbi-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,14 +74,15 @@ void	is_token(t_struct *data)
 	}
 }
 
-void	parsing(t_struct *data)
+int	parsing(t_struct *data)
 {
 	if (!data || !data->str)
-		return ;
+		return (0);
 	data->type = NONE;
 	is_token(data);
-	parsing_quote(data);
-	parse_error_pipe(data);
-	parse_redir(data);
+	if (parsing_quote(data) == 0 || parse_error_pipe(data) == 0
+		|| parse_redir(data) == 0)
+		return (0);
 	token_append(data);
+	return (1);
 }

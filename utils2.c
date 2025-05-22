@@ -6,7 +6,7 @@
 /*   By: wlarbi-a <wlarbi-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 14:40:08 by wlarbi-a          #+#    #+#             */
-/*   Updated: 2025/05/13 17:05:24 by wlarbi-a         ###   ########.fr       */
+/*   Updated: 2025/05/15 10:41:06 by wlarbi-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,4 +78,25 @@ size_t	ft_strcat(char *dst, char *src)
 	}
 	dst[len + i] = '\0';
 	return (len + ft_strlen(src));
+}
+
+size_t	ft_strlcpy(char *dst, char *src, size_t size)
+{
+	size_t	i;
+
+	i = 0;
+	if (size == 0)
+		return (ft_strlen(src));
+	while (src[i] != '\0' && (size - 1) > 0)
+	{
+		dst[i] = src[i];
+		i++;
+		size--;
+	}
+	dst[i] = '\0';
+	while (src[i] != '\0')
+	{
+		i++;
+	}
+	return (i);
 }
