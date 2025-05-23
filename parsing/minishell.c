@@ -6,7 +6,7 @@
 /*   By: wlarbi-a <wlarbi-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 16:23:24 by wlarbi-a          #+#    #+#             */
-/*   Updated: 2025/05/18 19:11:26 by wlarbi-a         ###   ########.fr       */
+/*   Updated: 2025/05/23 20:53:37 by wlarbi-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@ int	main(int argc, char **argv)
 	t_struct	*tmp;
 
 	(void)argv;
+	tmp = NULL;
+	data = NULL;
 	if (argc != 1)
 	{
 		printf("Error: need only one argument\n");
@@ -42,7 +44,7 @@ int	main(int argc, char **argv)
 				tmp = data->next;
 				while (tmp)
 				{
-					printf("{%d -> '%s'}\n", tmp->type, tmp->str);
+					printf("{%d -> %s}\n", tmp->type, tmp->str);
 					tmp = tmp->next;
 				}
 			}

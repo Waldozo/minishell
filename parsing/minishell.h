@@ -6,7 +6,7 @@
 /*   By: wlarbi-a <wlarbi-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 16:54:23 by wlarbi-a          #+#    #+#             */
-/*   Updated: 2025/05/18 19:14:28 by wlarbi-a         ###   ########.fr       */
+/*   Updated: 2025/05/23 16:46:11 by wlarbi-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,6 @@ typedef enum e_token
 	SPACES,
 	WORD_D_QUOTES,
 	WORD_S_QUOTES,
-	INFILE,
-	OUTFILE,
 }					t_token;
 
 typedef struct s_struct
@@ -54,6 +52,8 @@ char				*ft_strdup(char *src);
 size_t				ft_strcpy(char *dst, char *src);
 size_t				ft_strcat(char *dst, char *src);
 size_t				ft_strlcpy(char *dst, char *src, size_t size);
+char				*ft_strjoin(char *s1, char *s2);
+
 /*------------------parsing-----------------*/
 
 int					parsing(t_struct *data);
@@ -104,5 +104,9 @@ void				handle_word_d_quotes(t_struct *data, int *i,
 						t_struct **cur);
 void				handle_word_s_quotes(t_struct *data, int *i,
 						t_struct **cur);
+
+/*-----------------fusion token------------------*/
+
+void				echo_fusion(t_struct *data);
 
 #endif

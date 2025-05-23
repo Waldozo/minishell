@@ -6,7 +6,7 @@
 /*   By: wlarbi-a <wlarbi-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 17:13:50 by wlarbi-a          #+#    #+#             */
-/*   Updated: 2025/05/18 18:59:12 by wlarbi-a         ###   ########.fr       */
+/*   Updated: 2025/05/23 16:17:21 by wlarbi-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,5 +84,6 @@ int	parsing(t_struct *data)
 		|| parse_redir(data) == 0)
 		return (0);
 	token_append(data);
+	echo_fusion(data);
 	return (1);
 }

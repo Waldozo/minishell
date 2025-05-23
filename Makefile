@@ -1,6 +1,8 @@
 
-SOURCE = minishell.c utils.c parsing.c parsing_pipe.c parsing_redir.c \
-parsing_quote.c path.c utils2.c special_tokens.c handle.c word_quote.c
+SOURCE = parsing/minishell.c  parsing/utils.c  parsing/parsing.c  parsing/parsing_pipe.c  parsing/parsing_redir.c \
+ parsing/parsing_quote.c  parsing/path.c  parsing/utils2.c  parsing/special_tokens.c  parsing/handle.c  parsing/word_quote.c \
+ parsing/fusion_token.c  parsing/utils3.c
+#expand.c
 OBJ = ${SOURCE:.c=.o}
 CC = cc
 NAME = minishell

@@ -6,7 +6,7 @@
 /*   By: wlarbi-a <wlarbi-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 17:43:07 by wlarbi-a          #+#    #+#             */
-/*   Updated: 2025/05/18 18:58:32 by wlarbi-a         ###   ########.fr       */
+/*   Updated: 2025/05/23 16:46:21 by wlarbi-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,9 +62,6 @@ int	token_init(t_struct *data)
 	copy = ft_strdup(data->str);
 	if (!copy)
 		return (-1);
-	if (data->next)
-		free_token_list(data->next);
-	free(data->str);
 	data->str = copy;
 	data->next = NULL;
 	while (data->str[i] && data->str[i] != ' ' && data->str[i] != '<'
