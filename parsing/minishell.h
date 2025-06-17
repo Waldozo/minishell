@@ -6,7 +6,7 @@
 /*   By: wlarbi-a <wlarbi-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 16:54:23 by wlarbi-a          #+#    #+#             */
-/*   Updated: 2025/05/23 16:46:11 by wlarbi-a         ###   ########.fr       */
+/*   Updated: 2025/05/29 07:28:41 by wlarbi-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 # include <readline/history.h>
 # include <readline/readline.h>
+# include <signal.h>
 # include <stdio.h>
 # include <stdlib.h>
 # include <unistd.h>
@@ -39,6 +40,7 @@ typedef enum e_token
 typedef struct s_struct
 {
 	t_token			type;
+	char			**env;
 	char			*str;
 	struct s_struct	*next;
 }					t_struct;
@@ -109,4 +111,11 @@ void				handle_word_s_quotes(t_struct *data, int *i,
 
 void				echo_fusion(t_struct *data);
 
+/*-------------------signal----------------------*/
+
+void				handle_sigint(int sig);
+void				handle_sigquit(int sig);
+int					cpy_env(t_struct *data, char **envp);
+void				ft_env(t_struct *data, char **cmd);
+char				*expand_variables(char *str, char **envp);
 #endif

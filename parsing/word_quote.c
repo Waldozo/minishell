@@ -6,7 +6,7 @@
 /*   By: wlarbi-a <wlarbi-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/18 18:57:35 by wlarbi-a          #+#    #+#             */
-/*   Updated: 2025/05/23 17:46:37 by wlarbi-a         ###   ########.fr       */
+/*   Updated: 2025/05/29 07:49:43 by wlarbi-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	word_d_quotes(char *s, int *i, t_struct **cur)
 	int	len;
 
 	start = *i;
-	while (s[*i] && s[*i] != '\"' && s[*i] != '\'')
+	while (s[*i] && s[*i] != '\"')
 		(*i)++;
 	len = *i - start;
 	append_and_advance(cur, create_token(s + start, len, WORD_D_QUOTES));

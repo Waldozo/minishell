@@ -6,7 +6,7 @@
 /*   By: wlarbi-a <wlarbi-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 22:21:49 by wlarbi-a          #+#    #+#             */
-/*   Updated: 2025/05/23 17:15:17 by wlarbi-a         ###   ########.fr       */
+/*   Updated: 2025/05/26 16:17:36 by wlarbi-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,9 @@ int	parsing_quote(t_struct *data)
 	i = -1;
 	while (++i, data->str[i])
 	{
-		if (data->str[i] == '\'')
+		if (data->str[i] == '\'' && !found_dquote)
 			found_squote = !found_squote;
-		else if (data->str[i] == '\"')
+		else if (data->str[i] == '\"' && !found_squote)
 			found_dquote = !found_dquote;
 	}
 	if (found_squote)
