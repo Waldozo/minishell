@@ -6,7 +6,7 @@
 /*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 16:54:23 by wlarbi-a          #+#    #+#             */
-/*   Updated: 2025/06/15 14:56:55 by fbenkaci         ###   ########.fr       */
+/*   Updated: 2025/06/18 16:27:10 by fbenkaci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,8 +100,8 @@ char				*get_env_value_2(char *var_name, char **envp);
 
 /*-------------------- EXECUTION -----------------*/
 int					execution(t_cmd *cmd, t_exec *exec, t_struct **data);
-int					open_all_heredocs(t_struct **data, t_cmd *cmd);
-int					execute_single_builtin(t_cmd *cmd, t_struct **data);
+int					open_all_heredocs(t_exec *exec, t_struct **data, t_cmd *cmd);
+int					execute_single_builtin(t_exec *exec, t_cmd *cmd, t_struct **data);
 void				setup_redirections(t_cmd *cmd);
 void				setup_pipe_redirections(t_exec *exec, int index,
 						t_cmd *cmd);

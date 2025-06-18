@@ -6,7 +6,7 @@
 /*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 16:23:24 by wlarbi-a          #+#    #+#             */
-/*   Updated: 2025/06/16 16:36:17 by fbenkaci         ###   ########.fr       */
+/*   Updated: 2025/06/18 16:39:59 by fbenkaci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ int	main(int argc, char **argv, char **envp)
 	exec = malloc(sizeof(t_exec));
 	if (!exec)
 		return (1);
+	exec->last_status = 0;
 	if (argc != 1)
 	{
 		printf("Error: need only one argument\n");

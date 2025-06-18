@@ -6,7 +6,7 @@
 /*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/07 17:11:27 by fbenkaci          #+#    #+#             */
-/*   Updated: 2025/06/15 16:26:31 by fbenkaci         ###   ########.fr       */
+/*   Updated: 2025/06/18 16:50:41 by fbenkaci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,6 +112,10 @@ int	expand_variable(t_struct **cur, char *str, char **envp)
 	i = 0;
 	while (current_str[i])
 	{
+		if (current_str[i] == '$' && current_str[i + 1] == '?')
+		{
+			// ft_printf("%d\n", )	
+		}
 		if (current_str[i] == '$' && current_str[i + 1]
 			&& (ft_isalpha(current_str[i + 1]) || current_str[i + 1] == '_'))
 		{
