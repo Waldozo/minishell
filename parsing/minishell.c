@@ -6,7 +6,7 @@
 /*   By: wlarbi-a <wlarbi-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 16:23:24 by wlarbi-a          #+#    #+#             */
-/*   Updated: 2025/05/29 07:50:23 by wlarbi-a         ###   ########.fr       */
+/*   Updated: 2025/06/21 15:27:33 by wlarbi-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ int	main(int argc, char **argv, char **envp)
 	{
 		signal(SIGINT, handle_sigint);
 		signal(SIGQUIT, handle_sigquit);
+		
 		data->str = readline("💻 minishell > ");
 		if (data->str == NULL)
 		{
