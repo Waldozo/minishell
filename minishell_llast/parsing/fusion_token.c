@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   fusion_token.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wlarbi-a <wlarbi-a@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 14:42:59 by wlarbi-a          #+#    #+#             */
-/*   Updated: 2025/05/23 20:53:21 by wlarbi-a         ###   ########.fr       */
+/*   Updated: 2025/06/21 16:45:26 by fbenkaci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,7 +107,8 @@ void	echo_fusion(t_struct *data)
 	current = data;
 	while (current)
 	{
-		if (current->type == WORD_D_QUOTES || current->type == WORD_S_QUOTES)
+		// Apply clean_quotes to ALL word types
+		if (current->type == WORD || current->type == WORD_D_QUOTES || current->type == WORD_S_QUOTES)
 			clean_quotes(current);
 		current = current->next;
 	}

@@ -6,7 +6,7 @@
 /*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/12 16:27:16 by fbenkaci          #+#    #+#             */
-/*   Updated: 2025/06/19 16:12:38 by fbenkaci         ###   ########.fr       */
+/*   Updated: 2025/06/21 16:59:31 by fbenkaci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,10 +110,8 @@ int	heredoc_input(t_struct **data, char *delimiter)
 	line_nb = 1;
 	if (init_heredoc_pipe(fd) == -1)
 		return (-1);
-	
 	// Sauvegarder l'ancien handler et installer le nouveau
-	void (*old_sigint)(int) = signal(SIGINT, handle_sigint_heredoc);
-	
+	signal(SIGINT, handle_sigint_heredoc);
 	while (1)
 	{
 		// Vérifier si Ctrl+C a été reçu
@@ -121,21 +119,19 @@ int	heredoc_input(t_struct **data, char *delimiter)
 		{
 			close(fd[0]);
 			close(fd[1]);
-			signal(SIGINT, old_sigint);  // Restaurer l'ancien handler
+			// signal(SIGINT, old_sigint);  // Restaurer l'ancien handler
 			return (-1);
 		}
-		
 		ret = process_heredoc_line(data, delimiter, fd, &line_nb);
 		if (ret == -1)
 		{
-			signal(SIGINT, old_sigint);  // Restaurer l'ancien handler
+			signal(SIGINT, handle_sigint);  // Restaurer l'ancien handler
 			return (-1);
 		}
 		else if (ret == -2)
 			break;
 	}
-	
-	signal(SIGINT, old_sigint);  // Restaurer l'ancien handler
+	signal(SIGINT, handle_sigint);  // Restaurer l'ancien handler
 	close(fd[1]);
 	return (fd[0]);
 }
