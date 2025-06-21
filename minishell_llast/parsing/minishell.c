@@ -6,11 +6,13 @@
 /*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 16:23:24 by wlarbi-a          #+#    #+#             */
-/*   Updated: 2025/06/18 16:39:59 by fbenkaci         ###   ########.fr       */
+/*   Updated: 2025/06/19 16:38:27 by fbenkaci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+volatile sig_atomic_t g_signal_status = 0;
 
 void	free_tokens(t_struct *tokens)
 {
@@ -18,6 +20,8 @@ void	free_tokens(t_struct *tokens)
 
 	while (tokens)
 	{
+		if (tokens->env)
+			ft_free_array(tokens->env);
 		tmp = tokens->next;
 		if (tokens->str)
 			free(tokens->str);
@@ -41,7 +45,7 @@ int	main(int argc, char **argv, char **envp)
 	exec = malloc(sizeof(t_exec));
 	if (!exec)
 		return (1);
-	exec->last_status = 0;
+	// exec->last_status = 0;
 	if (argc != 1)
 	{
 		printf("Error: need only one argument\n");
@@ -61,17 +65,18 @@ int	main(int argc, char **argv, char **envp)
 		free(data);
 		return (1);
 	}
+	data->exec = exec;
+	exec->last_status = 0;
 	while (1)
 	{
-		signal(SIGINT, handle_sigint);
-		// signal(SIGQUIT, handle_sigquit);
-		// data->str = readline("💻 minishell > ");
+		exec->last_status = g_signal_status;
+		g_signal_status = 0;
+		signal(SIGINT, handle_sigint); // Je remplace le comportement de ctrl+c par le mien
+		signal(SIGQUIT, SIG_IGN); // je capture le signal quit et je lui dis de l'ignore dans le parent pour éviter le core dumped. Mon shell ne doit pas crasher.
 		data->str = readline("💻 minishell > ");
 		if (data->str == NULL)
 		{
-			// ft_free_array(data->env);
-			// free(exec);
-			// free(data);
+			ft_putstr_fd("exit\n", STDOUT_FILENO);
 			break ;
 		}
 		if (ft_strlen(data->str) > 0)
@@ -85,7 +90,7 @@ int	main(int argc, char **argv, char **envp)
 				// 	printf("{%d -> %s}\n", tmp->type, tmp->str);
 				// 	tmp = tmp->next;
 				// }
-				cmd = create_cmd_from_tokens(&data->next, data->env);
+				cmd = create_cmd_from_tokens(&data->next, data->env, exec);
 				if (!cmd)
 				{
 					free_tokens(data->next);
@@ -98,7 +103,6 @@ int	main(int argc, char **argv, char **envp)
 				execution(cmd, exec, &data);
 				free_all_cmd(cmd);
 				free_tokens(data->next);
-				// free(data->str);
 			}
 		}
 	}
@@ -106,6 +110,5 @@ int	main(int argc, char **argv, char **envp)
 	free(data->str);
 	free(exec);
 	free(data);
-	// free(data);
 	return (0);
 }

@@ -146,27 +146,22 @@ void	free_all_cmd(t_cmd *cmd)
 	}
 }
 
-t_cmd	*create_cmd_from_tokens(t_struct **cur, char **env)
+t_cmd	*create_cmd_from_tokens(t_struct **cur, char **env, t_exec *exec)
 {
 	t_cmd	*cmd;
 
 	// t_struct	**tmp;
 	cmd = init_new_cmd(cur, env);
 	if (!cmd)
-	{
-		// free_all_cmd(cmd);
 		return (NULL);
-	}
+
+	t_struct *tmp = *cur;
+	while (tmp)
+	{
+		tmp->exec = exec;
+		tmp = tmp->next;
+    }
 	if (create_cmd_list(cur, cmd, (*cur)->env) == -1)
-	{
-		// free_all_cmd(cmd);
-		// if (cmd->outfile)
-		// 	free(cmd->outfile);
-		// if (cmd->infile)
-		// 	free(cmd->infile);
-		// free(cmd->argv);
-		// free(cmd);
 		return (NULL);
-	}
 	return (cmd);
 }

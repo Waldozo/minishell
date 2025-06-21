@@ -1,31 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pwd.c                                              :+:      :+:    :+:   */
+/*   garbage.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/13 15:44:19 by fbenkaci          #+#    #+#             */
-/*   Updated: 2025/06/18 16:00:13 by fbenkaci         ###   ########.fr       */
+/*   Created: 2025/06/19 16:27:22 by fbenkaci          #+#    #+#             */
+/*   Updated: 2025/06/19 16:38:33 by fbenkaci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "builtins.h"
+#include "../parsing/minishell.h"
 
-int	ft_pwd(t_exec *exec)
+void free_garbage(t_garbage *gar)
 {
-	char	*cwd;
-
-	cwd = getcwd(NULL, 0);
-	if (cwd)
-	{
-		ft_printf("%s\n", cwd);
-		free(cwd);
-		exec->last_status = 0;
-		ft_printf("last_status: %d\n", exec->last_status);
-		return (1);
-	}
-	else
-		exec->last_status = 1;
-	return (0);
+    if (gar->cmd)
+        free_all_cmd(gar->cmd);
+    if (gar->data)
+    {
+        free_tokens(gar->data);
+        free(gar->data);
+    }
+    if (gar->exec)
+    {
+        
+        free(gar->exec);
+    }
 }

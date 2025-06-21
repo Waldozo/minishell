@@ -50,12 +50,12 @@ void	run_command(t_struct **data, t_exec *exec, t_cmd *cmd)
 		if (errno == ENOENT)
 		{
 			exec->last_status = 127;
-			exit(127); // Command not found
+			exit(127);
 		}
 		else if (errno == EACCES)
 		{
 			exec->last_status = 126;
-			exit(126); // Permission denied
+			exit(126);
 		}
 		exec->last_status = 1;
 		exit(1);
@@ -78,13 +78,13 @@ void	close_pipes_and_wait(t_exec *exec)
 	while (i < exec->nb_cmds)
 	{
 		waitpid(-1, &status, 0);
-		if (WIFEXITED(status) == true)
-			exec->last_status = WEXITSTATUS(status);
-				// processus terminé normalement
-		else if (WIFSIGNALED(status) == true)
-			exec->last_status = WTERMSIG(status) + 128;
-				// processus terminé par un signal,
-				// j'ajoute 128 car c'est la convention de bash
+		if (i == exec->nb_cmds - 1)
+		{
+			if (WIFEXITED(status))
+				exec->last_status = WEXITSTATUS(status);
+			else if (WIFSIGNALED(status))
+				exec->last_status = WTERMSIG(status) + 128;
+		}
 		i++;
 	}
 }
@@ -100,18 +100,16 @@ int	fork_and_execute_commands(t_struct **data, t_exec *exec, t_cmd *cmd)
 		if (exec->pids == -1)
 		{
 			perror("minishell: fork");
-			return (-1); // free tout
+			return (-1);
 		}
 		if (exec->pids == 0)
 		{
-			// a) Fermer les pipes inutiles
+			signal(SIGINT, SIG_DFL);  // Comportement par défaut (Terminated)
+			signal(SIGQUIT, SIG_DFL); // Comportement par défaut (Quit)
 			close_unused_pipes(exec, index);
-			// b) Brancher les extrémités de pipe selon index
 			if (index > 0 || !cmd->outfile)
 				setup_pipe_redirections(exec, index, cmd);
-			// c) Redirection
 			setup_redirections(cmd);
-			// d) Exécuter le builtin ou l’externe
 			run_command(data, exec, cmd);
 		}
 		index++;

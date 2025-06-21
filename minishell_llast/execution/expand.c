@@ -107,6 +107,7 @@ int	expand_variable(t_struct **cur, char *str, char **envp)
 	char	*current_str;
 	int		i;
 	int		result;
+	char	*new_str;
 
 	current_str = str;
 	i = 0;
@@ -114,7 +115,14 @@ int	expand_variable(t_struct **cur, char *str, char **envp)
 	{
 		if (current_str[i] == '$' && current_str[i + 1] == '?')
 		{
-			// ft_printf("%d\n", )	
+			char *exit_status_str = ft_itoa((*cur)->exec->last_status);
+			if (!exit_status_str)
+				return (-1);
+			new_str = replace_variable(current_str, i, "?", exit_status_str);
+			if (!new_str)
+				return (free(exit_status_str), -1);
+			free(exit_status_str);
+			return (update_current_string(cur, current_str, new_str));
 		}
 		if (current_str[i] == '$' && current_str[i + 1]
 			&& (ft_isalpha(current_str[i + 1]) || current_str[i + 1] == '_'))
