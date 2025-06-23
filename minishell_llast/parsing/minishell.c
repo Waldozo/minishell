@@ -6,7 +6,7 @@
 /*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 16:23:24 by wlarbi-a          #+#    #+#             */
-/*   Updated: 2025/06/21 20:37:30 by fbenkaci         ###   ########.fr       */
+/*   Updated: 2025/06/23 14:57:15 by fbenkaci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,10 @@ void	free_tokens(t_struct *tokens)
 
 	while (tokens)
 	{
-		if (tokens->env)
-		{
-			ft_free_array(tokens->env);
-		}
+		// if (tokens->env)
+		// {
+		// 	ft_free_array(tokens->env);
+		// }
 		tmp = tokens->next;
 		if (tokens->str)
 			free(tokens->str);
@@ -37,32 +37,35 @@ int	main(int argc, char **argv, char **envp)
 	t_struct	*data;
 	t_cmd		*cmd;
 	t_exec		*exec;
-	t_garbage	gc;
 
+	// t_garbage	gc;
+	// t_struct	*tmp;
 	(void)argv;
 	data = NULL;
-
-	init_garbage(&gc);
-	
-	exec = gc_malloc(sizeof(t_exec), &gc);
+	// init_garbage(&gc);
+	exec = malloc(sizeof(t_exec));
+	// exec = gc_malloc(sizeof(t_exec), &gc);
 	if (!exec)
 		return (1);
 	if (argc != 1)
 	{
 		printf("Error: need only one argument\n");
-		free_garbage(&gc);
+		// free_garbage(&gc);
 		return (1);
 	}
-	data = gc_malloc(sizeof(t_struct), &gc);
+	data = malloc(sizeof(t_struct));
 	if (!data)
 	{
 		perror("Error allocating memory");
-		free_garbage(&gc);
+		// free_garbage(&gc);
+		free(exec);
 		return (1);
 	}
 	if (cpy_env(data, envp) == -1)
 	{
-		free_garbage(&gc);
+		// free_garbage(&gc);
+		free(exec);
+		free(data);
 		return (1);
 	}
 	data->exec = exec;
@@ -72,9 +75,9 @@ int	main(int argc, char **argv, char **envp)
 		// exec->last_status = g_signal_status;
 		g_signal_status = 0;
 		signal(SIGINT, handle_sigint);
-			// Je remplace le comportement de ctrl+c par le mien
-		signal(SIGQUIT, SIG_IGN);     
-			// je capture le signal quit et je lui dis de l'ignore dans le parent pour éviter le core dumped. Mon shell ne doit pas crasher.
+		// Je remplace le comportement de ctrl+c par le mien
+		signal(SIGQUIT, SIG_IGN);
+		// je capture le signal quit et je lui dis de l'ignore dans le parent pour éviter le core dumped. Mon shell ne doit pas crasher.
 		data->str = readline("💻 minishell > ");
 		if (data->str == NULL)
 		{
@@ -95,25 +98,26 @@ int	main(int argc, char **argv, char **envp)
 				cmd = create_cmd_from_tokens(&data->next, data->env, exec);
 				if (!cmd)
 				{
-					free_garbage(&gc);
-					// free_tokens(data->next);
-					// ft_free_array(data->env);
-					// free(data->str);
-					// free(exec);
-					// free(data);
+					// free_garbage(&gc);
+					free_tokens(data->next);
+					ft_free_array(data->env);
+					free(data->str);
+					free(exec);
+					free(data);
 					return (1);
 				}
-				gc.cmd = cmd;
+				// gc.cmd = cmd;
 				execution(cmd, exec, &data);
 				free_all_cmd(cmd);
 				free_tokens(data->next);
+				free(exec->pipes);
 			}
 		}
 	}
 	ft_free_array(data->env);
-	// free_garbage(&gc);
 	free(data->str);
 	free(exec);
 	free(data);
+	// free_garbage(&gc);
 	return (0);
 }

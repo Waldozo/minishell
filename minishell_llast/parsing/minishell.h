@@ -6,7 +6,7 @@
 /*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 16:54:23 by wlarbi-a          #+#    #+#             */
-/*   Updated: 2025/06/21 20:07:42 by fbenkaci         ###   ########.fr       */
+/*   Updated: 2025/06/23 14:51:19 by fbenkaci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ typedef struct s_garbage
 	t_cmd						*cmd;
 	t_struct					*data;
 	t_exec						*exec;
-	t_gc_node					*allocations;
+	// t_gc_node					*allocations;
 }								t_garbage;
 
 void							*gc_malloc(size_t size, t_garbage *gc);

@@ -6,7 +6,7 @@
 /*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/11 20:09:40 by fbenkaci          #+#    #+#             */
-/*   Updated: 2025/06/18 16:38:36 by fbenkaci         ###   ########.fr       */
+/*   Updated: 2025/06/23 15:00:48 by fbenkaci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,13 @@ void	run_command(t_struct **data, t_exec *exec, t_cmd *cmd)
 		{
 			handle_cmd_error(cmd->argv[0]);
 			exec->last_status = 127;
+			free_all_cmd(cmd);
+			free_tokens((*data)->next);
+			ft_free_array((*data)->env);
+			free((*data)->str);
+			free(exec->pipes);
+			free(exec);
+			free(*data);
 			exit(127);
 		}
 		execve(exec->path, cmd->argv, (*data)->env);
@@ -50,11 +57,27 @@ void	run_command(t_struct **data, t_exec *exec, t_cmd *cmd)
 		if (errno == ENOENT)
 		{
 			exec->last_status = 127;
+			free_all_cmd(cmd);
+			free_tokens((*data)->next);
+			ft_free_array((*data)->env);
+			free((*data)->str);
+			free(exec->pipes);
+			free(exec);
+			free(exec->path);
+			free(*data);
 			exit(127);
 		}
 		else if (errno == EACCES)
 		{
 			exec->last_status = 126;
+			free_all_cmd(cmd);
+			free_tokens((*data)->next);
+			ft_free_array((*data)->env);
+			free((*data)->str);
+			free(exec->pipes);
+			free(exec);
+			free(exec->path);
+			free(*data);
 			exit(126);
 		}
 		exec->last_status = 1;
